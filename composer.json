@@ -1,0 +1,29 @@
+{
+    "name": "ailiangkuai/yii2-geoip",
+    "description": "yii2 extension provide geoip2",
+    "type": "yii2-extension",
+    "require": {
+        "yiisoft/yii2": "~2.0.6",
+        "geoip2/geoip2": "~2.1"
+    },
+    "license": "GPL2.0",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "RicoYao",
+            "email": "ailiangkuai@qq.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "ailiangkuai\\yii2\\GeoIP\\": "src/"
+        }
+    }
+}

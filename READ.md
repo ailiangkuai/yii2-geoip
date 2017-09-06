@@ -1,5 +1,5 @@
 # GeoIp for yii2
-使用方法
+yii2的扩展插件，可以根据ip获取ip所在的省市区邮编经纬度
 #install
 ## configuration
 ```php

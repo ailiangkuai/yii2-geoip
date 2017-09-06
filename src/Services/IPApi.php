@@ -107,17 +107,16 @@ class IPApi extends AbstractService
 
         return $this->hydrate([
             'ip'          => $ip,
-            'iso_code'    => $json->countryCode,
-            'country'     => $json->country,
-            'province'    => ArrayHelper::getValue($json, 'subdivisions.0.name', '') ?: '',
-            'city'        => $json->city,
-            'state'       => $json->region,
-            'state_name'  => $json->regionName,
-            'postal_code' => $json->zip,
-            'lat'         => $json->lat,
-            'lon'         => $json->lon,
-            'timezone'    => $json->timezone,
-            'continent'   => $this->getContinent($json->countryCode),
+            'iso_code'    => $json->countryCode ?: '',
+            'country'     => $json->country ?: '',
+            'city'        => $json->city ?: '',
+            'state'       => $json->region ?: '',
+            'state_name'  => $json->regionName ?: '',
+            'postal_code' => $json->zip ?: 0,
+            'lat'         => $json->lat ?: 0,
+            'lon'         => $json->lon ?: 0,
+            'timezone'    => $json->timezone ?: '',
+            'continent'   => $this->getContinent($json->countryCode) ?: '',
         ]);
     }
 

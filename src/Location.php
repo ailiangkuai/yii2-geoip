@@ -3,10 +3,27 @@
 namespace ailiangkuai\yii2\GeoIP;
 
 use ArrayAccess;
-use yii\base\Model;
-use yii\base\Object;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class Location
+ * @package ailiangkuai\yii2\GeoIP
+ * @author yaoyongfeng
+ * @property string $ip
+ * @property string $iso_code
+ * @property string $country
+ * @property string $city
+ * @property string $state
+ * @property string $state_name
+ * @property string|null $postal_code
+ * @property number $lat
+ * @property number $lon
+ * @property string $timezone
+ * @property string $continent
+ * @property bool $default
+ * @property string $currency
+ * @property bool $cached
+ */
 class Location implements ArrayAccess
 {
     /**

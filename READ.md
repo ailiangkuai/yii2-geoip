@@ -36,3 +36,28 @@ return [
     ],
 ];
 ```
+## example
+```php
+\Yii::$app->geoIp->getLocation('192.30.255.112');
+//ailiangkuai\yii2\GeoIP\Location Object
+//(
+//    [attributes:protected] => Array
+//        (
+//            [ip] => 192.30.255.112
+//            [iso_code] => US
+//            [country] => 美国
+//            [province] => 加利福尼亚州
+//            [city] => 旧金山
+//            [state] => CA
+//            [state_name] => 加利福尼亚州
+//            [postal_code] => 94107
+//            [lat] => 37.7697
+//            [lon] => -122.3933
+//            [timezone] => America/Los_Angeles
+//            [continent] => NA
+//            [currency] => USD
+//           [default] => 
+//        )
+//
+//)
+```

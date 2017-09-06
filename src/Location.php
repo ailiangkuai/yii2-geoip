@@ -7,7 +7,7 @@ use yii\base\Model;
 use yii\base\Object;
 use yii\helpers\ArrayHelper;
 
-class Location extends Model implements ArrayAccess
+class Location implements ArrayAccess
 {
     /**
      * The location's attributes
@@ -16,23 +16,33 @@ class Location extends Model implements ArrayAccess
      */
     protected $attributes = [];
 
-//    /**
-//     * Create a new location instance.
-//     *
-//     * @param array $attributes
-//     */
-//    public function __construct(array $attributes = [])
-//    {
-//        $this->attributes = $attributes;
-//    }
+    /**
+     * Create a new location instance.
+     *
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->attributes = $attributes;
+    }
 
-
+    /**
+     * Determine if the location is for the same IP address.
+     *
+     * @param  string $ip
+     *
+     * @return bool
+     */
+    public function same($ip)
+    {
+        return $this->getAttribute('ip') == $ip;
+    }
 
     /**
      * Set a given attribute on the location.
      *
      * @param  string $key
-     * @param  mixed  $value
+     * @param  mixed $value
      *
      * @return $this
      */
@@ -50,20 +60,20 @@ class Location extends Model implements ArrayAccess
      *
      * @return mixed
      */
-//    public function getAttribute($key)
-//    {
-//        $value = ArrayHelper::getValue($this->attributes, $key);
-//
-//        // First we will check for the presence of a mutator for the set operation
-//        // which simply lets the developers tweak the attribute as it is set.
-//        if (method_exists($this, 'get' . Str::studly($key) . 'Attribute')) {
-//            $method = 'get' . Str::studly($key) . 'Attribute';
-//
-//            return $this->{$method}($value);
-//        }
-//
-//        return $value;
-//    }
+    public function getAttribute($key)
+    {
+        $value = ArrayHelper::getValue($this->attributes, $key);
+
+        // First we will check for the presence of a mutator for the set operation
+        // which simply lets the developers tweak the attribute as it is set.
+        if (method_exists($this, 'get' . self::studly($key) . 'Attribute')) {
+            $method = 'get' . self::studly($key) . 'Attribute';
+
+            return $this->{$method}($value);
+        }
+
+        return $value;
+    }
 
     /**
      * Return the display name of the location.
@@ -95,12 +105,33 @@ class Location extends Model implements ArrayAccess
         return $this->attributes;
     }
 
+    /**
+     * Get the location's attribute
+     *
+     * @param  string $key
+     *
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return $this->getAttribute($key);
+    }
 
+    /**
+     * Set the location's attribute
+     *
+     * @param  string $key
+     * @param  mixed $value
+     */
+    public function __set($key, $value)
+    {
+        $this->setAttribute($key, $value);
+    }
 
     /**
      * Determine if the given attribute exists.
      *
-     * @param  mixed  $offset
+     * @param  mixed $offset
      * @return bool
      */
     public function offsetExists($offset)
@@ -111,7 +142,7 @@ class Location extends Model implements ArrayAccess
     /**
      * Get the value for a given offset.
      *
-     * @param  mixed  $offset
+     * @param  mixed $offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -122,8 +153,8 @@ class Location extends Model implements ArrayAccess
     /**
      * Set the value for a given offset.
      *
-     * @param  mixed  $offset
-     * @param  mixed  $value
+     * @param  mixed $offset
+     * @param  mixed $value
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -134,7 +165,7 @@ class Location extends Model implements ArrayAccess
     /**
      * Unset the value for a given offset.
      *
-     * @param  mixed  $offset
+     * @param  mixed $offset
      * @return void
      */
     public function offsetUnset($offset)
@@ -157,11 +188,23 @@ class Location extends Model implements ArrayAccess
     /**
      * Unset an attribute on the location.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return void
      */
     public function __unset($key)
     {
         unset($this->attributes[$key]);
+    }
+
+    /**
+     * Convert a value to studly caps case.
+     *
+     * @param  string $value
+     * @return string
+     */
+    public static function studly($value)
+    {
+        $value = ucwords(str_replace(['-', '_'], ' ', $value));
+        return str_replace(' ', '', $value);
     }
 }

@@ -19,19 +19,19 @@ class MaxMindWebService extends AbstractService
      * locales language
      * @var array
      */
-    private $locales = ['cn'];
+    private $locales = ['zh-CN'];
 
     /**
      * MAXMIND USER ID
      * @var string
      */
-    private $user_id = null;
+    private $userId = null;
 
     /**
      * MAXMIND LICENSE KEY
      * @var string
      */
-    private $license_key = null;
+    private $licenseKey = null;
 
 
     public function setLocales($locales)
@@ -39,14 +39,14 @@ class MaxMindWebService extends AbstractService
         $this->locales = $locales;
     }
 
-    public function setUserId($user_id)
+    public function setUserId($userId)
     {
-        $this->user_id = $user_id;
+        $this->userId = $userId;
     }
 
-    public function setLicenseKey($license_key)
+    public function setLicenseKey($licenseKey)
     {
-        $this->license_key = $license_key;
+        $this->licenseKey = $licenseKey;
     }
 
     /**
@@ -57,8 +57,8 @@ class MaxMindWebService extends AbstractService
     public function boot()
     {
         $this->client = new Client(
-            $this->user_id,
-            $this->license_key,
+            $this->userId,
+            $this->licenseKey,
             $this->locales
         );
     }

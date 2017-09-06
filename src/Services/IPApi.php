@@ -35,7 +35,7 @@ class IPApi extends AbstractService
     /**
      * @var string
      */
-    private $continent_path = null;
+    private $continentPath = null;
 
     public function setKey($key)
     {
@@ -47,9 +47,9 @@ class IPApi extends AbstractService
         $this->secure = $secure;
     }
 
-    public function setContinentPath($continent_path)
+    public function setContinentPath($continentPath)
     {
-        $this->continent_path = $continent_path;
+        $this->continentPath = $continentPath;
     }
 
 
@@ -79,8 +79,8 @@ class IPApi extends AbstractService
         $this->client = new HttpClient($base);
 
         // Set continents
-        if (file_exists($this->continent_path)) {
-            $this->continents = json_decode(file_get_contents($this->continent_path), true);
+        if (file_exists($this->continentPath)) {
+            $this->continents = json_decode(file_get_contents($this->continentPath), true);
         }
     }
 
@@ -129,7 +129,7 @@ class IPApi extends AbstractService
      */
     public function update()
     {
-        if ($this->continent_path === false) {
+        if ($this->continentPath === false) {
             throw new Exception('Continent path not set in config file.');
         }
 
@@ -157,7 +157,7 @@ class IPApi extends AbstractService
         }
 
         // Get path
-        $path = $this->continent_path;
+        $path = $this->continentPath;
 
         file_put_contents($path, json_encode($output));
 

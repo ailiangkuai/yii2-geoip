@@ -18,7 +18,7 @@ class MaxMindDatabase extends AbstractService
     protected $reader;
 
     private $database_path = false;
-    private $locales = ['cn'];
+    private $locales = ['zh-CN'];
     private $update_url = 'https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz';
 
     public function setDatabasePath($database_path)

@@ -6,10 +6,9 @@ use ailiangkuai\yii2\GeoIP\Services\ServiceInterface;
 use Exception;
 use yii\base\InvalidParamException;
 use yii\base\Object;
-use yii\caching\Cache;
 use yii\di\Instance;
 use yii\helpers\ArrayHelper;
-use yii\redis\Connection;
+use yii\redis\Cache;
 
 class GeoIP extends Object
 {
@@ -118,7 +117,7 @@ class GeoIP extends Object
     public function init()
     {
         parent::init();
-        $this->cache && $this->cache = Instance::ensure($this->cache, Cache::className());
+        $this->cache && $this->cache = Instance::ensure($this->cache, \yii\redis\Cache::className());
         // Set IP
         $this->remote_ip = $this->default_location['ip'] = $this->getClientIP();
     }
@@ -137,7 +136,7 @@ class GeoIP extends Object
     public function setServices(array $services)
     {
         foreach ($services as $key => $service) {
-            if (!isset($service['class']) || (!$service['class'] instanceof ServiceInterface)) {
+            if (\Yii::createObject($service) instanceof ServiceInterface == false) {
                 throw new InvalidParamException('Configuration driver error, please confirm class implements ailiangkuai\yii2\GeoIP\Services\ServiceInterface');
             }
         }

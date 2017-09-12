@@ -10,6 +10,11 @@ use yii\di\Instance;
 use yii\helpers\ArrayHelper;
 use yii\redis\Cache;
 
+/**
+ * Class GeoIP
+ * @package ailiangkuai\yii2\GeoIP
+ * @author yaoyongfeng
+ */
 class GeoIP extends Object
 {
 
@@ -36,6 +41,8 @@ class GeoIP extends Object
 
     protected $include_currency = true;
 
+    protected $include_e_chart_state = false;
+
     /**
      * Remote Machine IP address.
      *
@@ -56,6 +63,12 @@ class GeoIP extends Object
      * @var array
      */
     protected $currencies = null;
+
+    /**
+     * maxmind geoip的省份映射百度地图省份
+     * @var array
+     */
+    protected $eChartStates = null;
 
     /**
      * GeoIP service id.
@@ -182,6 +195,16 @@ class GeoIP extends Object
         $this->include_currency = (bool)$include_currency;
     }
 
+    /**
+     *
+     * @param $include_e_chart_state
+     * @author yaoyongfeng
+     */
+    public function setIncludeEChartState($include_e_chart_state)
+    {
+        $this->include_e_chart_state = (bool)$include_e_chart_state;
+    }
+
 
     /**
      * Get the location from the provided IP.
@@ -232,6 +255,13 @@ class GeoIP extends Object
                 if (!$location->currency) {
                     $location->currency = $this->getCurrency($location->iso_code);
                 }
+                // Fix Hong Kong Taiwan Macau as chinese province
+                $this->fixChinaState($location);
+
+                // Set state_name
+                if ($location->state_name) {
+                    $location->state_name = $this->getEChartState($location->state_name);
+                }
 
                 // Set default
                 $location->default = false;
@@ -261,6 +291,17 @@ class GeoIP extends Object
         }
 
         return ArrayHelper::getValue($this->currencies, $iso);
+    }
+
+    public function getEChartState($stateName)
+    {
+        if (!$this->include_e_chart_state) {
+            return $stateName;
+        }
+        if ($this->eChartStates === null && $this->include_e_chart_state) {
+            $this->eChartStates = include(__DIR__ . '/Support/EChartStates.php');
+        }
+        return ArrayHelper::getValue($this->eChartStates, $stateName, $stateName);
     }
 
     /**
@@ -364,6 +405,23 @@ class GeoIP extends Object
 //        }
 
         return false;
+    }
+
+    /**
+     * Fix Hong Kong Taiwan Macau as chinese province
+     * @param Location $location
+     * @author yaoyongfeng
+     */
+    private function fixChinaState(Location &$location)
+    {
+        $isoCodeItems = ['HK', 'MO', 'TW'];
+        if (in_array($location->iso_code, $isoCodeItems)) {
+            $location->state      = $location->iso_code;
+            $location->state_name = $location->country;
+            $location->city       = $location->city ?: $location->country;
+            $location->iso_code   = 'CN';
+            $location->country    = '中国';
+        }
     }
 
 
